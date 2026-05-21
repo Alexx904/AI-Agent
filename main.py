@@ -32,7 +32,7 @@ prompt = ChatPromptTemplate.from_messages(
         ("human", "{query}"),
         ("placeholder", "{agent_scratchpad}"),
     ]
-)
+).partial(format_instructions=parser.get_format_instructions()) # Parzializza il template di prompt con le istruzioni di formattazione del parser
 
 
 

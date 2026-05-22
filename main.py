@@ -44,7 +44,11 @@ agent_executor = AgentExecutor(agent=agent, tools=[], verbose=True) # Crea un es
 raw_response = agent_executor.invoke({"query": "What is the meaning of life?", "name": "Alice"}) # Esegue una richiesta all'agente, passando la query dell'utente e un nome (che può essere utilizzato nel template di prompt)
 print(raw_response) # Stampa la risposta grezza dell'agente
 
-
+try:
+    structured_response = parser.parse(raw_response.get("output")[0]["text"]) # Analizza la risposta grezza dell'agente utilizzando il parser Pydantic per ottenere una risposta strutturata
+    # print(structured_response.topic) # Stampa il topic della ricerca dalla risposta strutturata, se tolgo .topic ottengo tutta la risposta strutturata
+except Exception as e:
+    print(f"Error parsing response", e, "Raw response - ", raw_response) # Stampa un messaggio di errore se c'è un problema durante l'analisi della risposta, insieme alla risposta grezza per il debug
 
 ## Esempio di utilizzo dei modelli di chat
 # llm2 = ChatOpenAI(model="gpt-3.5-turbo") # Inizializza il modello di chat di OpenAI

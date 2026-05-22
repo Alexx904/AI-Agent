@@ -5,7 +5,7 @@ from langchain_anthropic import ChatAnthropic # Importa il modello di chat di An
 from langchain_core.prompts import ChatPromptTemplate # Per creare template di prompt per i modelli di chat
 from langchain_core.output_parsers import PydanticOutputParser # Per analizzare le uscite dei modelli di chat con Pydantic
 from langchain_classic.agents import create_tool_calling_agent, AgentExecutor # Per creare agenti che possono utilizzare strumenti durante la conversazione
-from tools import search_tool, wiki_tool # Importa lo strumento di ricerca definito in tools.py creato per eseguire ricerche su DuckDuckGo e Wikipedia
+from tools import search_tool, wiki_tool, save_tool # Importa gli strumenti definiti in tools.py creati per eseguire ricerche su DuckDuckGo e Wikipedia e per salvare i dati in un file di testo    
 
 load_dotenv()
 
@@ -35,7 +35,7 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 ).partial(format_instructions=parser.get_format_instructions()) # Parzializza il template di prompt con le istruzioni di formattazione del parser
 
-tools = [search_tool, wiki_tool] # Crea una lista di strumenti che l'agente può utilizzare durante la conversazione, in questo caso solo lo strumento di ricerca su DuckDuckGo e Wikipedia
+tools = [search_tool, wiki_tool, save_tool] # Crea una lista di strumenti che l'agente può utilizzare durante la conversazione, in questo caso solo lo strumento di ricerca su DuckDuckGo e Wikipedia
 agent = create_tool_calling_agent(
     llm=llm, # Il modello di chat di Anthropic che l'agente utilizzerà per rispondere alle query dell'utente
     prompt=prompt, # Il template di prompt che l'agente utilizzerà per formattare le risposte

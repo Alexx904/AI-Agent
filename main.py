@@ -3,8 +3,9 @@ from pydantic import BaseModel # Per definire modelli di dati con validazione
 from langchain_openai import ChatOpenAI # Importa il modello di chat di OpenAI
 from langchain_anthropic import ChatAnthropic # Importa il modello di chat di Anthropic
 from langchain_core.prompts import ChatPromptTemplate # Per creare template di prompt per i modelli di chat
-from langchain_core.outputs_parsers import PydanticOutputParser # Per analizzare le uscite dei modelli di chat con Pydantic
-from langchain.agents import create_tool_calling_agent, AgentExecutor # Per creare agenti che possono utilizzare strumenti durante la conversazione
+from langchain_core.output_parsers import PydanticOutputParser # Per analizzare le uscite dei modelli di chat con Pydantic
+from langchain_classic.agents import create_tool_calling_agent, AgentExecutor # Per creare agenti che possono utilizzare strumenti durante la conversazione
+from tools import search_tool # Importa lo strumento di ricerca definito in tools.py creato per eseguire ricerche su DuckDuckGo da me
 
 load_dotenv()
 
@@ -34,19 +35,22 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 ).partial(format_instructions=parser.get_format_instructions()) # Parzializza il template di prompt con le istruzioni di formattazione del parser
 
+tools = [search_tool] # Crea una lista di strumenti che l'agente può utilizzare durante la conversazione, in questo caso solo lo strumento di ricerca su DuckDuckGo
 agent = create_tool_calling_agent(
     llm=llm, # Il modello di chat di Anthropic che l'agente utilizzerà per rispondere alle query dell'utente
     prompt=prompt, # Il template di prompt che l'agente utilizzerà per formattare le risposte
-    tools=[], # Qui puoi aggiungere strumenti che l'agente può utilizzare durante la conversazione
+    tools=tools, # Qui puoi aggiungere strumenti che l'agente può utilizzare durante la conversazione
 )
 
-agent_executor = AgentExecutor(agent=agent, tools=[], verbose=True) # Crea un esecutore per l'agente, che gestirà l'esecuzione delle azioni dell'agente durante la conversazione, verbose=True permette di vedere i dettagli dell'esecuzione
-raw_response = agent_executor.invoke({"query": "What is the meaning of life?", "name": "Alice"}) # Esegue una richiesta all'agente, passando la query dell'utente e un nome (che può essere utilizzato nel template di prompt)
-print(raw_response) # Stampa la risposta grezza dell'agente
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True) # Crea un esecutore per l'agente, che gestirà l'esecuzione delle azioni dell'agente durante la conversazione, verbose=True permette di vedere i dettagli dell'esecuzione
+query = input("What can I help you research? ") # Chiede all'utente di inserire una query
+raw_response = agent_executor.invoke({"query": query, "name": "Alice"}) # Esegue una richiesta all'agente, passando la query dell'utente e un nome (che può essere utilizzato nel template di prompt)
+# print(raw_response) # Stampa la risposta grezza dell'agente
 
 try:
     structured_response = parser.parse(raw_response.get("output")[0]["text"]) # Analizza la risposta grezza dell'agente utilizzando il parser Pydantic per ottenere una risposta strutturata
     # print(structured_response.topic) # Stampa il topic della ricerca dalla risposta strutturata, se tolgo .topic ottengo tutta la risposta strutturata
+    print(structured_response) # Stampa la risposta strutturata completa
 except Exception as e:
     print(f"Error parsing response", e, "Raw response - ", raw_response) # Stampa un messaggio di errore se c'è un problema durante l'analisi della risposta, insieme alla risposta grezza per il debug
 

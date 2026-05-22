@@ -1,7 +1,10 @@
-langchain
-wikipedia
-langchain-community
-langchain-openai
-langchain-anthropic
-python-dotenv
-pydantic
+langchain # Per importare le librerie di LangChain, che è un framework per costruire agenti conversazionali intelligenti
+wikipedia # Per importare la libreria di Wikipedia, che può essere utilizzata per eseguire ricerche su Wikipedia
+langchain-community # Per importare le librerie della comunità di LangChain, che possono includere strumenti e modelli aggiuntivi per la costruzione di agenti conversazionali
+langchain-openai # Per importare il modello di chat di OpenAI, che può essere utilizzato per rispondere alle query degli utenti
+langchain-anthropic # Per importare il modello di chat di Anthropic, che può essere utilizzato per rispondere alle query degli utenti
+python-dotenv # Per importare la libreria python-dotenv, che permette di caricare variabili d'ambiente da un file .env
+pydantic # Per importare la libreria Pydantic, che è utilizzata per definire modelli di dati e analizzare le uscite dei modelli di chat in modo strutturato
+duckduckgo_search # Per importare la libreria duckduckgo_search, che permette di eseguire ricerche su DuckDuckGo NON FUNZIONA USA DDGS
+langchain-classic # Per importare le librerie classiche di LangChain, che possono includere strumenti e modelli aggiuntivi per la costruzione di agenti conversazionali
+ddgs # Per importare la libreria ddgs, che è un wrapper per eseguire ricerche su DuckDuckGo in modo più efficiente

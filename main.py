@@ -4,9 +4,9 @@ from langchain_openai import ChatOpenAI # Importa il modello di chat di OpenAI
 from langchain_anthropic import ChatAnthropic # Importa il modello di chat di Anthropic
 from langchain_core.prompts import ChatPromptTemplate # Per creare template di prompt per i modelli di chat
 from langchain_core.outputs_parsers import PydanticOutputParser # Per analizzare le uscite dei modelli di chat con Pydantic
+from langchain.agents import create_tool_calling_agent, AgentExecutor # Per creare agenti che possono utilizzare strumenti durante la conversazione
 
 load_dotenv()
-
 
 class ResearchResponse(BaseModel): # Definisce un modello di dati per la risposta della ricerca
     topic: str # Il tema della ricerca
@@ -28,16 +28,34 @@ prompt = ChatPromptTemplate.from_messages(
             Wrap the output in this format and provde no other text\n{format_instructions}
             """,
         ), # Il messaggio di sistema definisce il ruolo del modello di chat di Anthropic e fornisce istruzioni su come formattare l'output
-        ("placeholder", "{chat_history}"),
-        ("human", "{query}"),
-        ("placeholder", "{agent_scratchpad}"),
+        ("placeholder", "{chat_history}"), # Il messaggio di placeholder è utilizzato per inserire la cronologia della chat, che può essere utilizzata per tenere traccia delle conversazioni precedenti
+        ("human", "{query} {name}"), # Il messaggio umano è utilizzato per inserire la query dell'utente, che è la domanda o richiesta a cui il modello di chat di Anthropic deve rispondere
+        ("placeholder", "{agent_scratchpad}"), # Il messaggio di placeholder è utilizzato per inserire la cronologia della chat e il "scratchpad" dell'agente, che può essere utilizzato per tenere traccia delle azioni dell'agente durante la conversazione
     ]
 ).partial(format_instructions=parser.get_format_instructions()) # Parzializza il template di prompt con le istruzioni di formattazione del parser
 
+agent = create_tool_calling_agent(
+    llm=llm, # Il modello di chat di Anthropic che l'agente utilizzerà per rispondere alle query dell'utente
+    prompt=prompt, # Il template di prompt che l'agente utilizzerà per formattare le risposte
+    tools=[], # Qui puoi aggiungere strumenti che l'agente può utilizzare durante la conversazione
+)
+
+agent_executor = AgentExecutor(agent=agent, tools=[], verbose=True) # Crea un esecutore per l'agente, che gestirà l'esecuzione delle azioni dell'agente durante la conversazione, verbose=True permette di vedere i dettagli dell'esecuzione
+raw_response = agent_executor.invoke({"query": "What is the meaning of life?", "name": "Alice"}) # Esegue una richiesta all'agente, passando la query dell'utente e un nome (che può essere utilizzato nel template di prompt)
+print(raw_response) # Stampa la risposta grezza dell'agente
 
 
 
-############################## Esempio di utilizzo dei modelli di chat
+## Esempio di utilizzo dei modelli di chat
 # llm2 = ChatOpenAI(model="gpt-3.5-turbo") # Inizializza il modello di chat di OpenAI
 # response = llm2.invoke("What is the meaning of life?") # Esegue una richiesta al modello di chat di OpenAI
 # print(response) # Stampa la risposta del modello di chat di OpenAI
+#
+#           
+#
+#
+#
+#
+#
+#
+#

@@ -12,7 +12,7 @@ chat = ChatOpenAI(api_key=api_key)
 
 # Loop di chat
 def chat_loop():
-    print("Inizia la chat (digita 'exit' per uscire):")
+    print("Inizia la chat (digita 'esci/exit' per uscire):")
     while True:
         user_input = input("Tu: ")
         if user_input.lower() == "esci" or user_input.lower() == "exit":

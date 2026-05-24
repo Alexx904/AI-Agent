@@ -13,13 +13,23 @@ if not api_key:
     print("Errore: La chiave API di OpenAI non è stata trovata. Assicurati di averla inserita nel file .env.")
     sys.exit(1)
 
+try:
+    user_temp = float(input("Inserisci la temperatura (0.0 - 1.0): ")) # Chiede all'utente di inserire una temperatura per il modello, con un valore predefinito di 1.0
+except ValueError:
+    print("Valore non valido.")
+    sys.exit(1)
 
 # Istanzia il modello OpenAI
-chat = ChatOpenAI(api_key=api_key, temperature=1.0) # Crea un'istanza del modello OpenAI con la chiave API e una temperatura di 1.0 (che controlla la creatività delle risposte)
+chat = ChatOpenAI(api_key=api_key, temperature=user_temp) # Crea un'istanza del modello OpenAI con la chiave API e la temperatura inserita dall'utente
 
 # Loop di chat
 def chat_loop():
     print("Inizia la chat (digita 'esci/exit' per uscire):")
+
+    # Saluto iniziale
+    greeting = "Ciao! Sono un assistente virtuale. Come posso aiutarti oggi?"
+    print(f"AI: {greeting}")
+
     while True:
         user_input = input("Tu: ")
         if user_input.lower() == "esci" or user_input.lower() == "exit":
@@ -28,7 +38,7 @@ def chat_loop():
         
         # Crea un messaggio umano e ottieni la risposta del modello
         msg = HumanMessage(content=user_input) # Crea un messaggio umano con il contenuto dell'input dell'utente
-        response = chat.invoke(msg) # Invia il messaggio ad chat = ChatOpenAI e ottieni la risposta che viene stampata a video
+        response = chat.invoke([msg]) # Invia il messaggio ad chat = ChatOpenAI e ottieni la risposta che viene stampata a video
         
         print(f"AI: {response.content}")
 

@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 import os
 
 # Carica la chiave API da file .env
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+load_dotenv() # Serve per caricare le variabili d'ambiente dal file .env
+api_key = os.getenv("OPENAI_API_KEY") # Recupera la chiave API dall'ambiente
 
 # Istanzia il modello OpenAI
-chat = ChatOpenAI(api_key=api_key)
+chat = ChatOpenAI(api_key=api_key) # Crea un'istanza del modello OpenAI utilizzando la chiave API
 
 # Loop di chat
 def chat_loop():
@@ -20,8 +20,8 @@ def chat_loop():
             break
         
         # Crea un messaggio umano e ottieni la risposta del modello
-        msg = HumanMessage(content=user_input)
-        response = chat([msg])
+        msg = HumanMessage(content=user_input) # Crea un messaggio umano con il contenuto dell'input dell'utente
+        response = chat([msg]) # Invia il messaggio ad chat = ChatOpenAI e ottieni la risposta che viene stampata a video
         
         print(f"AI: {response.content}")
 

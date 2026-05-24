@@ -1,4 +1,4 @@
-from langchain_openai import OpenAI # Serve per interagire con il modello OpenAI, in questo caso per creare un'istanza del modello e inviare messaggi
+from langchain_openai import ChatOpenAI # Serve per interagire con il modello OpenAI, in questo caso per creare un'istanza del modello e inviare messaggi
 from langchain_core.messages import HumanMessage # Serve per creare messaggi umani da inviare al modello
 from dotenv import load_dotenv # Serve per caricare le variabili d'ambiente da un file .env
 import os # Serve per accedere alle variabili d'ambiente, in questo caso la chiave API di OpenAI
@@ -15,7 +15,7 @@ if not api_key:
 
 
 # Istanzia il modello OpenAI
-chat = ChatOpenAI(api_key=api_key) # Crea un'istanza del modello OpenAI utilizzando la chiave API
+chat = ChatOpenAI(api_key=api_key, temperature=1.0) # Crea un'istanza del modello OpenAI con la chiave API e una temperatura di 1.0 (che controlla la creatività delle risposte)
 
 # Loop di chat
 def chat_loop():

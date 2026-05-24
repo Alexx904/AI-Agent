@@ -16,7 +16,7 @@ class ResearchResponse(BaseModel): # Definisce un modello di dati per la rispost
     tools_used: list[str] # Una lista di strumenti utilizzati per la ricerca
 
 
-llm = ChatAnthropic(model="claude-2") # Inizializza il modello di chat di Anthropic
+llm = ChatAnthropic(model="claude-2", temperature=1.0) # Inizializza il modello di chat di Anthropic
 parser = PydanticOutputParser(pydantic_object=ResearchResponse) # Crea un parser per analizzare le uscite del modello di chat di Anthropic
 
 prompt = ChatPromptTemplate.from_messages(

@@ -54,16 +54,11 @@ try:
 except Exception as e:
     print(f"Error parsing response", e, "Raw response - ", raw_response) # Stampa un messaggio di errore se c'è un problema durante l'analisi della risposta, insieme alla risposta grezza per il debug
 
+
+
+
+
 ## Esempio di utilizzo dei modelli di chat
 # llm2 = ChatOpenAI(model="gpt-3.5-turbo") # Inizializza il modello di chat di OpenAI
 # response = llm2.invoke("What is the meaning of life?") # Esegue una richiesta al modello di chat di OpenAI
 # print(response) # Stampa la risposta del modello di chat di OpenAI
-#
-#           
-#
-#
-#
-#
-#
-#
-#

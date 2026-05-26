@@ -49,7 +49,7 @@ def chat_loop():
         msg = [system_prompt, HumanMessage(content=user_input)] # Crea un messaggio umano con il contenuto dell'input dell'utente
         response = chat.invoke(msg) # Invia il messaggio ad chat = ChatOpenAI e ottieni la risposta che viene stampata a video
         
-        print(f"AI [{datetime.now().strftime('%H:%M')}]: {response.content}") # Stampa la risposta del modello con l'ora corrente
+        print(f"AI [{datetime.now().strftime('%H:%M')}]: {response.content[:200]}") # Stampa la risposta del modello con l'ora corrente, limitando a 50 caratteri per evitare output troppo lunghi
 
 # Avvia il loop di chat
 chat_loop()

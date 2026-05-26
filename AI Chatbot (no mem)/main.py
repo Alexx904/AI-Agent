@@ -31,12 +31,23 @@ chat = ChatOpenAI(api_key=api_key, temperature=user_temp) # Crea un'istanza del 
 user_lang = input("In quale lingua vuoi chattare? (es. 'it' per italiano, 'en' per inglese): ").strip().lower() # Chiede all'utente di scegliere la lingua per la chat
 system_prompt = SystemMessage(content=f"Sei un assistente virtuale che parla {user_lang}. Rispondi alle domande dell'utente in {user_lang}.") # Crea un messaggio di sistema per impostare la lingua del bot
 
+mode = input("Vuoi che il bot risponda in MAIUSCOLO o minuscolo? ").strip().lower() # Chiede all'utente se vuole che il bot risponda in maiuscolo o minuscolo
+if mode not in ["maiuscolo", "minuscolo"]:
+    print("Valore non valido. Rispondi con 'MAIUSCOLO' o 'minuscolo'.")
+    mode = "normale" # Se l'utente inserisce un valore non valido, il bot risponderà in modo normale
+
 # Loop di chat
 def chat_loop():
     print("Inizia la chat (digita 'esci/exit' per uscire):")
 
     # Saluto iniziale
     greeting = "Ciao! Sono un assistente virtuale. Come posso aiutarti oggi?"
+
+    if mode == "maiuscolo":
+        greeting = greeting.upper() # Se l'utente ha scelto "MAIUSCOLO", converte il saluto in maiuscolo
+    elif mode == "minuscolo":
+        greeting = greeting.lower() # Se l'utente ha scelto "minuscolo", converte il saluto in minuscolo
+
     print(f"AI [{datetime.now().strftime('%H:%M')}]: {greeting}") # Stampa un messaggio di benvenuto con l'ora corrente
 
     while True:
@@ -49,6 +60,11 @@ def chat_loop():
         msg = [system_prompt, HumanMessage(content=user_input)] # Crea un messaggio umano con il contenuto dell'input dell'utente
         response = chat.invoke(msg) # Invia il messaggio ad chat = ChatOpenAI e ottieni la risposta che viene stampata a video
         
+        if mode == "maiuscolo": # Se l'utente ha scelto "MAIUSCOLO", converte la risposta del modello in maiuscolo
+            response.content = response.content.upper()
+        elif mode == "minuscolo": # Se l'utente ha scelto "minuscolo", converte la risposta del modello in minuscolo
+            response.content = response.content.lower()
+
         print(f"AI [{datetime.now().strftime('%H:%M')}]: {response.content[:200]}") # Stampa la risposta del modello con l'ora corrente, limitando a 50 caratteri per evitare output troppo lunghi
 
 # Avvia il loop di chat

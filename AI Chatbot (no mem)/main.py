@@ -3,6 +3,7 @@ from langchain_core.messages import HumanMessage, SystemMessage # Serve per crea
 from dotenv import load_dotenv # Serve per caricare le variabili d'ambiente da un file .env
 import os # Serve per accedere alle variabili d'ambiente, in questo caso la chiave API di OpenAI
 import sys # Serve per uscire dal programma in caso di errore nella chiave API
+from datetime import datetime # Serve per ottenere la data e l'ora corrente
 
 # Carica la chiave API da file .env
 load_dotenv() # Serve per caricare le variabili d'ambiente dal file .env
@@ -36,7 +37,7 @@ def chat_loop():
 
     # Saluto iniziale
     greeting = "Ciao! Sono un assistente virtuale. Come posso aiutarti oggi?"
-    print(f"AI: {greeting}")
+    print(f"AI [{datetime.now().strftime('%H:%M')}]: {greeting}") # Stampa un messaggio di benvenuto con l'ora corrente
 
     while True:
         user_input = input("Tu: ")
@@ -48,7 +49,7 @@ def chat_loop():
         msg = [system_prompt, HumanMessage(content=user_input)] # Crea un messaggio umano con il contenuto dell'input dell'utente
         response = chat.invoke(msg) # Invia il messaggio ad chat = ChatOpenAI e ottieni la risposta che viene stampata a video
         
-        print(f"AI: {response.content}")
+        print(f"AI [{datetime.now().strftime('%H:%M')}]: {response.content}") # Stampa la risposta del modello con l'ora corrente
 
 # Avvia il loop di chat
 chat_loop()

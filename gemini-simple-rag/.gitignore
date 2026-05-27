@@ -1,0 +1,43 @@
+# Ambiente virtuale
+venv/
+.venv/
+env/
+
+# Variabili d'ambiente (NON caricare mai su GitHub!)
+.env
+
+# File Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+*.pyd
+
+# Distribuzione / packaging
+.eggs/
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dati e PDF (opzionale: rimuovi se vuoi includere i dati)
+data/*.pdf
+data/*.csv
+
+# FAISS index salvato localmente
+*.index
+faiss_store/
+
+# macOS
+.DS_Store
+
+# Log
+*.log

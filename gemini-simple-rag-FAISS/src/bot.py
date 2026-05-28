@@ -7,8 +7,8 @@ def create_rag_chain(retriever):
     """
     Crea la catena RAG che unisce il recupero dei documenti alla generazione della risposta.
     """
-    # 1. Inizializziamo il modello linguistico di Google (Gemini) con il nome corretto
-    llm = ChatGoogleGenerativeAI(model="models/gemini-2.5-flash-lite", temperature=0)
+    # 1. Inizializziamo il modello linguistico di Google (Gemini 2.5 Flash Lite)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)
 
     # 2. Creiamo il prompt
     template = """Sei un assistente utile e competente specializzato nell'analisi di documenti.
@@ -24,13 +24,23 @@ def create_rag_chain(retriever):
     Risposta:"""
     prompt = ChatPromptTemplate.from_template(template)
 
-    # Funzione di supporto per unire i frammenti
-    def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
+    # Funzione di supporto per unire i frammenti E STAMPARLI A SCHERMO
+    def format_docs_and_log(docs):
+        print("\n\n=== LOG DEL RETRIEVER: CONTESTO RECUPERATO DAL DATABASE ===")
+        print(f"Ho trovato {len(docs)} frammenti rilevanti per questa domanda:")
+        
+        testo_unito = ""
+        for i, doc in enumerate(docs):
+            print(f"\n--- Frammento {i+1} ---")
+            print(doc.page_content)
+            testo_unito += doc.page_content + "\n\n"
+            
+        print("============================================================\n")
+        return testo_unito
 
     # 3. Costruiamo la catena RAG
     rag_chain = (
-        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        {"context": retriever | format_docs_and_log, "question": RunnablePassthrough()}
         | prompt
         | llm
         | StrOutputParser()
